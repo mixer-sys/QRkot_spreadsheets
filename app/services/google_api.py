@@ -5,8 +5,8 @@ from aiogoogle import Aiogoogle
 from app.core.config import settings
 from app.core.constants import (
     DRIVE_SERVICE, DRIVE_SERVICE_VERSION,
-    FORMAT, SHEETS, SHEETS_SERVICE, SHEETS_SERVICE_VERSION,
-    TABLE_HEADERS,
+    FORMAT, SHEETS, SHEETS_SERVICE,
+    SHEETS_SERVICE_VERSION, TABLE_HEADERS,
     TABLE_TITLE, TITLE
 )
 
@@ -55,7 +55,9 @@ async def spreadsheets_update_value(
         wrapper_services: Aiogoogle
 ) -> None:
     now_date_time = datetime.now().strftime(FORMAT)
-    service = await wrapper_services.discover('sheets', 'v4')
+    service = await wrapper_services.discover(
+        SHEETS_SERVICE, SHEETS_SERVICE_VERSION
+    )
 
     table_values = [
         ['Отчёт от', now_date_time],
