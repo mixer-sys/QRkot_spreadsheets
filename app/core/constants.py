@@ -34,3 +34,22 @@ TITLE = 'Отчёт на {now_date_time}'
 TABLE_TITLE = 'Топ проектов по скорости развития'
 
 TABLE_HEADERS = ['Название проекта', 'Время сбора', 'Описание']
+
+SHEETS_SERVICE = 'sheets'
+SHEETS_SERVICE_VERSION = 'v4'
+DRIVE_SERVICE = 'drive'
+DRIVE_SERVICE_VERSION = 'v3'
+
+SHEETS = [
+    {
+        'properties': {
+            'sheetType': 'GRID',
+            'sheetId': 0,
+            'title': 'Лист1',
+            'gridProperties': {
+                'rowCount': 100,
+                'columnCount': 11
+            }
+        }
+    }
+]

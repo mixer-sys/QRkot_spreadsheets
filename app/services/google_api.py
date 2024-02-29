@@ -4,7 +4,9 @@ from aiogoogle import Aiogoogle
 
 from app.core.config import settings
 from app.core.constants import (
-    FORMAT, TABLE_HEADERS,
+    DRIVE_SERVICE, DRIVE_SERVICE_VERSION,
+    FORMAT, SHEETS, SHEETS_SERVICE, SHEETS_SERVICE_VERSION,
+    TABLE_HEADERS,
     TABLE_TITLE, TITLE
 )
 
@@ -13,23 +15,20 @@ async def spreadsheets_create(wrapper_services: Aiogoogle) -> str:
 
     now_date_time = datetime.now().strftime(FORMAT)
 
-    service = await wrapper_services.discover('sheets', 'v4')
+    service = await wrapper_services.discover(
+        SHEETS_SERVICE, SHEETS_SERVICE_VERSION
+    )
 
     spreadsheet_body = {
         'properties': {'title': TITLE.format(now_date_time=now_date_time),
                        'locale': 'ru_RU'},
-        'sheets': [{'properties': {'sheetType': 'GRID',
-                                   'sheetId': 0,
-                                   'title': 'Лист1',
-                                   'gridProperties': {'rowCount': 100,
-                                                      'columnCount': 11}}}]
+        'sheets': SHEETS
     }
 
     response = await wrapper_services.as_service_account(
         service.spreadsheets.create(json=spreadsheet_body)
     )
-    spreadsheetid = response['spreadsheetId']
-    return spreadsheetid
+    return response['spreadsheetId']
 
 
 async def set_user_permissions(
@@ -39,12 +38,14 @@ async def set_user_permissions(
     permissions_body = {'type': 'user',
                         'role': 'writer',
                         'emailAddress': settings.email}
-    service = await wrapper_services.discover('drive', 'v3')
+    service = await wrapper_services.discover(
+        DRIVE_SERVICE, DRIVE_SERVICE_VERSION
+    )
     await wrapper_services.as_service_account(
         service.permissions.create(
             fileId=spreadsheetid,
             json=permissions_body,
-            fields="id"
+            fields='id'
         ))
 
 
